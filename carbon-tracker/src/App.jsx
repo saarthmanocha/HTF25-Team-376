@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Leaf, TrendingDown, Award, Calendar, Zap, Car, Utensils, ShoppingBag, Home, Plus, X, CheckCircle } from 'lucide-react';
+import { Leaf, TrendingDown, Award, Calendar, Zap, Car, Utensils, ShoppingBag, Home, Plus, X, CheckCircle, ArrowRight, Sparkles, BarChart3, Target, Moon, Sun } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
@@ -71,6 +71,130 @@ const COMPARISON_DATA = {
   }
 };
 
+const LEVELS = [
+  { name: 'Bronze Beginner', minCarbon: 0, maxCarbon: 50, color: '#cd7f32', icon: '🥉', benefits: 'Just getting started!' },
+  { name: 'Silver Saver', minCarbon: 50, maxCarbon: 100, color: '#C0C0C0', icon: '🥈', benefits: 'Making good progress!' },
+  { name: 'Gold Guardian', minCarbon: 100, maxCarbon: 200, color: '#FFD700', icon: '🥇', benefits: 'Environmental champion!' },
+  { name: 'Platinum Pioneer', minCarbon: 200, maxCarbon: Infinity, color: '#E5E4E2', icon: '💎', benefits: 'Elite eco-warrior!' }
+];
+
+// Simulated leaderboard data (for demo - in production this would be real users)
+const generateRandomLeaderboard = () => {
+  const names = [
+    'EcoWarrior_23', 'GreenGuru', 'ClimateChamp', 'TreeHugger', 'CarbonCrusher',
+    'SolarSoul', 'WindWalker', 'OceanGuardian', 'BikeCommuter', 'ZeroWaster',
+    'RecycleRanger', 'CompostKing', 'VeganVibes', 'GreenMachine', 'EarthFirst'
+  ];
+  const avatars = ['🌟', '🌿', '⚡', '🌳', '💪', '☀️', '🌊', '🚴', '♻️', '🌱', '🔥', '💚', '🌍', '✨', '🦋'];
+  
+  return Array.from({ length: 10 }, (_, i) => {
+    const carbon = Math.random() * 250 + 20; // Random between 20-270
+    const level = LEVELS.find(l => carbon >= l.minCarbon && carbon < l.maxCarbon) || LEVELS[0];
+    return {
+      name: names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 100),
+      carbon: parseFloat(carbon.toFixed(1)),
+      streak: Math.floor(Math.random() * 60) + 1,
+      level: level.name,
+      avatar: avatars[Math.floor(Math.random() * avatars.length)]
+    };
+  });
+};
+
+function WelcomeScreen({ onStart }) {
+  const [animateIn, setAnimateIn] = useState(false);
+
+  useEffect(() => {
+    setAnimateIn(true);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-500 via-teal-500 to-blue-600 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-emerald-300/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-teal-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
+
+      <div className={`max-w-4xl w-full relative z-10 transition-all duration-1000 ${animateIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        {/* Logo and Title */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-3xl shadow-2xl mb-6 transform hover:scale-110 transition-transform duration-300">
+            <Leaf className="w-14 h-14 text-emerald-500" />
+          </div>
+          <h1 className="text-6xl md:text-7xl font-bold text-white mb-4 tracking-tight">
+            EcoTrack
+          </h1>
+          <p className="text-xl md:text-2xl text-white/90 font-light">
+            Your Personal Carbon Footprint Journey
+          </p>
+        </div>
+
+        {/* Feature Cards */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+            <div className="bg-emerald-400/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+              <BarChart3 className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-white font-semibold text-lg mb-2">Track Daily Impact</h3>
+            <p className="text-white/80 text-sm">Monitor your carbon footprint from transport, meals, shopping, and energy use</p>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+            <div className="bg-blue-400/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+              <Target className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-white font-semibold text-lg mb-2">Set Green Goals</h3>
+            <p className="text-white/80 text-sm">Get personalized insights and tips to reduce your environmental impact</p>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+            <div className="bg-purple-400/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+              <Award className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-white font-semibold text-lg mb-2">Earn Achievements</h3>
+            <p className="text-white/80 text-sm">Build streaks and unlock badges as you maintain sustainable habits</p>
+          </div>
+        </div>
+
+        {/* Stats Preview */}
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 mb-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Sparkles className="w-6 h-6 text-yellow-300" />
+            <h3 className="text-white font-semibold text-xl">Why Track Your Carbon?</h3>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">12kg</div>
+              <div className="text-white/80 text-sm">Average daily CO₂ per person</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">60%</div>
+              <div className="text-white/80 text-sm">Reduction possible with simple changes</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">21kg</div>
+              <div className="text-white/80 text-sm">CO₂ absorbed by one tree yearly</div>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Button */}
+        <div className="text-center">
+          <button
+            onClick={onStart}
+            className="group bg-white text-emerald-600 px-12 py-5 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 inline-flex items-center gap-3"
+          >
+            Start Your Journey
+            <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
+          </button>
+          <p className="text-white/70 text-sm mt-4">Join thousands making a difference, one day at a time</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CarbonTracker() {
   const [activities, setActivities] = useState([]);
   const [showLogger, setShowLogger] = useState(false);
@@ -78,7 +202,17 @@ export default function CarbonTracker() {
   const [streak, setStreak] = useState(0);
   const [totalSaved, setTotalSaved] = useState(0);
   const [viewMode, setViewMode] = useState('week');
+  const [showWelcome, setShowWelcome] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [aiInput, setAiInput] = useState('');
+  const [showAiLogger, setShowAiLogger] = useState(false);
+  const [activeChallenge, setActiveChallenge] = useState(null);
+  const [challengeProgress, setChallengeProgress] = useState({});
+  const [showAiCoach, setShowAiCoach] = useState(false);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [userMessage, setUserMessage] = useState('');
+  const [isAiThinking, setIsAiThinking] = useState(false);
   
   const [newActivity, setNewActivity] = useState({
     category: 'transport',
@@ -90,13 +224,30 @@ export default function CarbonTracker() {
   });
 
   useEffect(() => {
-    const saved = localStorage.getItem('carbonActivities');
-    if (saved) {
-      setActivities(JSON.parse(saved));
-    }
-    const savedStreak = localStorage.getItem('carbonStreak');
-    if (savedStreak) setStreak(parseInt(savedStreak));
-  }, []);
+  const saved = localStorage.getItem('carbonActivities');
+  if (saved) {
+    setActivities(JSON.parse(saved));
+  }
+  const savedStreak = localStorage.getItem('carbonStreak');
+  if (savedStreak) setStreak(parseInt(savedStreak));
+  
+  const hasVisited = localStorage.getItem('carbonHasVisited');
+  if (hasVisited) {
+    setShowWelcome(false);
+  }
+  
+  const savedDarkMode = localStorage.getItem('carbonDarkMode');
+  if (savedDarkMode) setDarkMode(JSON.parse(savedDarkMode));
+}, []);
+
+  useEffect(() => {
+  localStorage.setItem('carbonDarkMode', JSON.stringify(darkMode));
+  if (darkMode) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+}, [darkMode]);
 
   useEffect(() => {
     localStorage.setItem('carbonActivities', JSON.stringify(activities));
@@ -130,6 +281,11 @@ export default function CarbonTracker() {
     const saved = Math.max(0, (activities.length * 10) - total);
     setTotalSaved(saved);
   };
+
+  const handleStartJourney = () => {
+  localStorage.setItem('carbonHasVisited', 'true');
+  setShowWelcome(false);
+};
 
   const calculateCarbon = (activity) => {
     const { category, type, distance, quantity, hours } = activity;
@@ -342,6 +498,201 @@ export default function CarbonTracker() {
     };
   };
 
+  const getCurrentLevel = () => {
+    const total = parseFloat(getTotalCarbon());
+    
+    for (let i = LEVELS.length - 1; i >= 0; i--) {
+      if (total >= LEVELS[i].minCarbon) {
+        const level = LEVELS[i];
+        const nextLevel = LEVELS[i + 1];
+        const progress = nextLevel 
+          ? ((total - level.minCarbon) / (nextLevel.minCarbon - level.minCarbon)) * 100
+          : 100;
+        
+        return {
+          ...level,
+          progress: Math.min(progress, 100),
+          nextLevel: nextLevel || null,
+          carbonToNext: nextLevel ? nextLevel.minCarbon - total : 0
+        };
+      }
+    }
+    
+    return {
+      ...LEVELS[0],
+      progress: 0,
+      nextLevel: LEVELS[1],
+      carbonToNext: LEVELS[1].minCarbon
+    };
+  };
+
+  const getLeaderboardWithUser = () => {
+    const userEntry = {
+      name: 'You',
+      carbon: parseFloat(getTotalCarbon()),
+      streak: streak,
+      level: getCurrentLevel().name,
+      avatar: '👤',
+      isUser: true
+    };
+    
+    const allUsers = [...generateRandomLeaderboard(), userEntry];
+    return allUsers.sort((a, b) => b.carbon - a.carbon);
+  };
+
+  const getChallengeProgress = (challenge) => {
+    if (!challenge) return 0;
+    
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    const weekAgoStr = weekAgo.toISOString().split('T')[0];
+    
+    const weekActivities = activities.filter(a => a.date >= weekAgoStr);
+    
+    switch (challenge.type) {
+      case 'transport':
+        // Count bike/walk days
+        const bikeDays = new Set(
+          weekActivities
+            .filter(a => a.category === 'transport' && (a.type === 'bike' || a.type === 'walk'))
+            .map(a => a.date)
+        ).size;
+        return bikeDays;
+        
+      case 'meals':
+        // Count plant-based meals
+        const plantMeals = weekActivities.filter(
+          a => a.category === 'meals' && (a.type === 'vegan' || a.type === 'vegetarian')
+        ).length;
+        return plantMeals;
+        
+      case 'shopping':
+        // Count shopping activities (lower is better)
+        const shopping = weekActivities.filter(a => a.category === 'shopping').length;
+        return Math.max(0, challenge.target - shopping);
+        
+      case 'energy':
+        // Compare energy use this week vs last week
+        const twoWeeksAgo = new Date();
+        twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+        const twoWeeksAgoStr = twoWeeksAgo.toISOString().split('T')[0];
+        
+        const thisWeekEnergy = weekActivities
+          .filter(a => a.category === 'energy')
+          .reduce((sum, a) => sum + a.carbon, 0);
+          
+        const lastWeekEnergy = activities
+          .filter(a => a.date >= twoWeeksAgoStr && a.date < weekAgoStr && a.category === 'energy')
+          .reduce((sum, a) => sum + a.carbon, 0);
+          
+        if (lastWeekEnergy === 0) return 0;
+        const reduction = ((lastWeekEnergy - thisWeekEnergy) / lastWeekEnergy) * 100;
+        return Math.max(0, Math.min(20, reduction));
+        
+      default:
+        return 0;
+    }
+  };
+
+  const startChallenge = (challenge) => {
+    setActiveChallenge(challenge);
+    localStorage.setItem('activeChallenge', JSON.stringify(challenge));
+  };
+
+  const completeChallenge = () => {
+    if (!activeChallenge) return;
+    
+    const completed = JSON.parse(localStorage.getItem('completedChallenges') || '[]');
+    completed.push({
+      ...activeChallenge,
+      completedDate: new Date().toISOString(),
+      progress: getChallengeProgress(activeChallenge)
+    });
+    localStorage.setItem('completedChallenges', JSON.stringify(completed));
+    
+    setActiveChallenge(null);
+    localStorage.removeItem('activeChallenge');
+    alert('🎉 Challenge completed! You earned a badge!');
+  };
+
+  const chatWithAI = async (message) => {
+    setIsAiThinking(true);
+    
+    // Add user message to chat
+    const newUserMsg = { role: 'user', content: message };
+    setChatHistory(prev => [...prev, newUserMsg]);
+    setUserMessage('');
+    
+    try {
+      // Prepare context about user's data
+      const userContext = `
+User's Carbon Tracking Data:
+- Total CO₂ tracked: ${getTotalCarbon()} kg
+- Daily average: ${getAverageDaily()} kg
+- Current streak: ${streak} days
+- Total activities: ${activities.length}
+- Current level: ${getCurrentLevel().name}
+
+Category breakdown:
+${getCategoryData().map(cat => `- ${cat.name}: ${cat.value} kg (${((cat.value / parseFloat(getTotalCarbon())) * 100).toFixed(1)}%)`).join('\n')}
+
+Recent activities (last 5):
+${activities.slice(0, 5).map(a => `- ${a.category}: ${a.type} (${a.carbon} kg CO₂)`).join('\n')}
+`;
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer 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'
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: `You are an expert sustainability coach helping users reduce their carbon footprint. Be encouraging, specific, and actionable. Use the user's actual tracking data to give personalized advice. Keep responses concise (2-3 paragraphs max). Use emojis sparingly but effectively.
+
+${userContext}`
+            },
+            ...chatHistory.slice(-6), // Last 3 exchanges for context
+            newUserMsg
+          ],
+          max_tokens: 300,
+          temperature: 0.7
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+
+      const data = await response.json();
+      const aiMessage = {
+        role: 'assistant',
+        content: data.choices[0].message.content
+      };
+
+      setChatHistory(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('AI Error:', error);
+      const errorMessage = {
+        role: 'assistant',
+        content: "I'm having trouble connecting right now. Please try again! In the meantime, focus on reducing your highest carbon category. 💚"
+      };
+      setChatHistory(prev => [...prev, errorMessage]);
+    } finally {
+      setIsAiThinking(false);
+    }
+  };
+
+  useEffect(() => {
+    const saved = localStorage.getItem('activeChallenge');
+    if (saved) {
+      setActiveChallenge(JSON.parse(saved));
+    }
+  }, []);
+
   const generateShareCard = () => {
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
@@ -430,10 +781,148 @@ export default function CarbonTracker() {
     alert('Share text copied to clipboard!');
   };
 
+  const parseNaturalLanguage = (text) => {
+    const activities = [];
+    const lowerText = text.toLowerCase();
+    
+    // Transport patterns
+    const transportPatterns = [
+      { regex: /drove?\s+(\d+)\s*(km|kilometers?)/i, type: 'car', category: 'transport' },
+      { regex: /drove?\s+.*?(\d+)\s*(km|kilometers?)/i, type: 'car', category: 'transport' },
+      { regex: /(bus|took\s+bus).*?(\d+)\s*(km|kilometers?)/i, type: 'bus', category: 'transport' },
+      { regex: /(train|took\s+train).*?(\d+)\s*(km|kilometers?)/i, type: 'train', category: 'transport' },
+      { regex: /(bike|biked|cycled).*?(\d+)\s*(km|kilometers?)/i, type: 'bike', category: 'transport' },
+      { regex: /(motorcycle|bike|motorbike).*?(\d+)\s*(km|kilometers?)/i, type: 'motorcycle', category: 'transport' },
+    ];
+    
+    // Meals patterns
+    const mealPatterns = [
+      { regex: /(beef|steak|burger)/i, type: 'beef', category: 'meals', quantity: 1 },
+      { regex: /(pork|bacon|ham)/i, type: 'pork', category: 'meals', quantity: 1 },
+      { regex: /(chicken|poultry)/i, type: 'chicken', category: 'meals', quantity: 1 },
+      { regex: /(fish|seafood|salmon|tuna)/i, type: 'fish', category: 'meals', quantity: 1 },
+      { regex: /(vegetarian|veggie)/i, type: 'vegetarian', category: 'meals', quantity: 1 },
+      { regex: /(vegan|plant.based)/i, type: 'vegan', category: 'meals', quantity: 1 },
+    ];
+    
+    // Shopping patterns
+    const shoppingPatterns = [
+      { regex: /(bought|purchased).*?(\d+).*?(shirt|cloth|dress|pant)/i, type: 'clothing', category: 'shopping' },
+      { regex: /(bought|purchased).*?(phone|laptop|electronics|computer)/i, type: 'electronics', category: 'shopping', quantity: 1 },
+      { regex: /(bought|purchased).*?(\d+).*?(item|thing)/i, type: 'other', category: 'shopping' },
+      { regex: /(groceries|grocery|food\s+shopping)/i, type: 'groceries', category: 'shopping', quantity: 1 },
+    ];
+    
+    // Energy patterns
+    const energyPatterns = [
+      { regex: /(ac|air.?conditioning|cooling).*?(\d+)\s*(hour|hr)/i, type: 'cooling', category: 'energy' },
+      { regex: /(heat|heating).*?(\d+)\s*(hour|hr)/i, type: 'heating', category: 'energy' },
+      { regex: /(electricity|power).*?(\d+)\s*(hour|hr)/i, type: 'electricity', category: 'energy' },
+    ];
+    
+    // Parse transport
+    transportPatterns.forEach(pattern => {
+      const match = lowerText.match(pattern.regex);
+      if (match) {
+        const distance = match[1] || match[2];
+        if (distance) {
+          activities.push({
+            category: pattern.category,
+            type: pattern.type,
+            distance: distance,
+            quantity: '',
+            hours: '',
+            date: new Date().toISOString().split('T')[0]
+          });
+        }
+      }
+    });
+    
+    // Parse meals
+    mealPatterns.forEach(pattern => {
+      const match = lowerText.match(pattern.regex);
+      if (match) {
+        // Check for quantity
+        const quantityMatch = lowerText.match(new RegExp(`(\\d+).*?${pattern.regex.source}`, 'i'));
+        const quantity = quantityMatch ? quantityMatch[1] : '1';
+        
+        activities.push({
+          category: pattern.category,
+          type: pattern.type,
+          distance: '',
+          quantity: quantity,
+          hours: '',
+          date: new Date().toISOString().split('T')[0]
+        });
+      }
+    });
+    
+    // Parse shopping
+    shoppingPatterns.forEach(pattern => {
+      const match = lowerText.match(pattern.regex);
+      if (match) {
+        const quantity = match[2] || '1';
+        activities.push({
+          category: pattern.category,
+          type: pattern.type,
+          distance: '',
+          quantity: quantity,
+          hours: '',
+          date: new Date().toISOString().split('T')[0]
+        });
+      }
+    });
+    
+    // Parse energy
+    energyPatterns.forEach(pattern => {
+      const match = lowerText.match(pattern.regex);
+      if (match) {
+        const hours = match[2];
+        activities.push({
+          category: pattern.category,
+          type: pattern.type,
+          distance: '',
+          quantity: '',
+          hours: hours,
+          date: new Date().toISOString().split('T')[0]
+        });
+      }
+    });
+    
+    return activities;
+  };
+
+  const processNaturalLanguage = (text) => {
+    const parsedActivities = parseNaturalLanguage(text);
+    
+    if (parsedActivities.length === 0) {
+      alert('🤔 Sorry, I couldn\'t understand that. Try something like: "drove 50km and ate beef"');
+      return;
+    }
+    
+    // Add all parsed activities
+    parsedActivities.forEach(activity => {
+      const carbon = calculateCarbon(activity);
+      const newActivity = {
+        ...activity,
+        carbon,
+        id: Date.now() + Math.random(), // Unique ID
+        timestamp: new Date().toISOString()
+      };
+      setActivities(prev => [newActivity, ...prev]);
+    });
+    
+    alert(`✨ AI logged ${parsedActivities.length} activity/activities!`);
+  };
+
+  if (showWelcome) {
+  return <WelcomeScreen onStart={handleStartJourney} />;
+}
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-blue-50 to-teal-50">
+  <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-gray-900' : 'bg-gradient-to-br from-emerald-50 via-blue-50 to-teal-50'}`}>
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-lg border-b border-emerald-100 sticky top-0 z-50">
+      <div className={`sticky top-0 z-50 border-b transition-colors duration-300 ${darkMode ? 'bg-gray-800/95 border-gray-700' : 'bg-white/80 border-emerald-100'} backdrop-blur-lg`}>
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -444,10 +933,31 @@ export default function CarbonTracker() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                   EcoTrack
                 </h1>
-                <p className="text-xs text-gray-500">Your Carbon Journey</p>
+                <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Your Carbon Journey</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <button
+                 onClick={() => setDarkMode(!darkMode)}
+                 className={`p-2 rounded-lg transition-all ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'}`}
+                 title={darkMode ? 'Light Mode' : 'Dark Mode'}
+              >
+                 {darkMode ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-600" />}
+              </button>
+              <button
+                onClick={() => setShowAiCoach(true)}
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" />
+                AI Coach
+              </button>
+              <button
+                onClick={() => setShowAiLogger(true)}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                <Zap className="w-4 h-4" />
+                AI Logger
+              </button>
               <button
                 onClick={() => setShowShareModal(true)}
                 className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all flex items-center gap-2"
@@ -465,11 +975,12 @@ export default function CarbonTracker() {
             </div>
         </div>
       </div>
+    </div>
 
       {/* Navigation */}
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="bg-white/80 backdrop-blur-lg rounded-xl p-1 flex gap-1 border border-emerald-100">
-          {['dashboard', 'activities', 'achievements'].map(tab => (
+          {['dashboard', 'activities', 'achievements', 'leaderboard', 'challenges'].map(tab => (
             <button
               key={tab}
               onClick={() => setCurrentTab(tab)}
@@ -535,6 +1046,82 @@ export default function CarbonTracker() {
                 </div>
               </div>
             </div>
+
+            {/* Level Progress Card */}
+            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-lg rounded-xl p-6 border-2 border-yellow-200">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Your Level</p>
+                  <h3 className="text-2xl font-bold" style={{ color: getCurrentLevel().color }}>
+                    {getCurrentLevel().icon} {getCurrentLevel().name}
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1">{getCurrentLevel().benefits}</p>
+                </div>
+              </div>
+              
+              {getCurrentLevel().nextLevel && (
+                <div>
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-600">Progress to {getCurrentLevel().nextLevel.name}</span>
+                    <span className="font-bold text-gray-800">{getCurrentLevel().progress.toFixed(0)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                    <div
+                      className="h-3 rounded-full transition-all duration-500"
+                      style={{
+                        width: `${getCurrentLevel().progress}%`,
+                        background: `linear-gradient(to right, ${getCurrentLevel().color}, ${getCurrentLevel().nextLevel.color})`
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    {getCurrentLevel().carbonToNext.toFixed(1)} kg more to level up!
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Active Challenge Card */}
+            {activeChallenge && (
+              <div className="bg-gradient-to-br from-pink-50 to-purple-50 backdrop-blur-lg rounded-xl p-6 border-2 border-pink-300">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{activeChallenge.icon}</span>
+                    <div>
+                      <p className="text-sm text-gray-600">Active Challenge</p>
+                      <h3 className="text-xl font-bold text-gray-800">{activeChallenge.name}</h3>
+                    </div>
+                  </div>
+                  <Target className="w-6 h-6 text-pink-500" />
+                </div>
+                
+                <div className="mb-3">
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-gray-600">Progress</span>
+                    <span className="font-bold text-gray-800">
+                      {getChallengeProgress(activeChallenge)} / {activeChallenge.target}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-3">
+                    <div
+                      className="bg-gradient-to-r from-pink-500 to-purple-500 h-3 rounded-full transition-all duration-500"
+                      style={{ width: `${Math.min((getChallengeProgress(activeChallenge) / activeChallenge.target) * 100, 100)}%` }}
+                    />
+                  </div>
+                </div>
+                
+                <p className="text-sm text-gray-600 mb-3">{activeChallenge.desc}</p>
+                
+                {getChallengeProgress(activeChallenge) >= activeChallenge.target && (
+                  <button
+                    onClick={completeChallenge}
+                    className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all"
+                  >
+                    ✅ Complete Challenge
+                  </button>
+                )}
+              </div>
+            )}
 
             {/* Insight Card */}
             <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl p-6 text-white">
@@ -821,6 +1408,236 @@ export default function CarbonTracker() {
             </div>
           </div>
         )}
+
+        {currentTab === 'leaderboard' && (
+          <div className="space-y-4">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 rounded-xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-2">🏆 Global Leaderboard</h3>
+              <p className="text-white/90">See how you rank among eco-warriors worldwide!</p>
+            </div>
+
+            {/* Current User Level */}
+            <div className="bg-white/80 backdrop-blur-lg rounded-xl p-6 border-2" style={{ borderColor: getCurrentLevel().color }}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="text-6xl">{getCurrentLevel().icon}</div>
+                  <div>
+                    <h3 className="text-2xl font-bold" style={{ color: getCurrentLevel().color }}>
+                      {getCurrentLevel().name}
+                    </h3>
+                    <p className="text-gray-600">{getCurrentLevel().benefits}</p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {getTotalCarbon()} kg CO₂ tracked • {streak} day streak
+                    </p>
+                  </div>
+                </div>
+                {getCurrentLevel().nextLevel && (
+                  <div className="text-right">
+                    <p className="text-sm text-gray-600 mb-1">Next Level</p>
+                    <p className="text-lg font-bold" style={{ color: getCurrentLevel().nextLevel.color }}>
+                      {getCurrentLevel().nextLevel.icon} {getCurrentLevel().nextLevel.name}
+                    </p>
+                    <p className="text-xs text-gray-500">{getCurrentLevel().carbonToNext.toFixed(1)} kg to go</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Leaderboard List */}
+            <div className="bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-gray-200">
+              <h3 className="font-semibold mb-4 text-gray-800 flex items-center gap-2">
+                <Award className="w-5 h-5 text-yellow-500" />
+                Top Carbon Trackers
+              </h3>
+              <div className="space-y-2">
+                {getLeaderboardWithUser().map((user, index) => {
+                  const userLevel = LEVELS.find(l => l.name === user.level) || LEVELS[0];
+                  const isTopThree = index < 3;
+                  const medals = ['🥇', '🥈', '🥉'];
+                  
+                  return (
+                    <div
+                      key={index}
+                      className={`flex items-center justify-between p-4 rounded-xl transition-all ${
+                        user.isUser 
+                          ? 'bg-gradient-to-r from-emerald-100 to-teal-100 border-2 border-emerald-300 shadow-md' 
+                          : 'bg-gray-50 hover:bg-gray-100'
+                      }`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="text-2xl font-bold text-gray-400 w-8">
+                          {isTopThree ? medals[index] : `#${index + 1}`}
+                        </div>
+                        <div className="text-3xl">{user.avatar}</div>
+                        <div>
+                          <h4 className={`font-semibold ${user.isUser ? 'text-emerald-800' : 'text-gray-800'}`}>
+                            {user.name}
+                            {user.isUser && <span className="ml-2 text-xs bg-emerald-500 text-white px-2 py-1 rounded-full">YOU</span>}
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            {userLevel.icon} {user.level} • {user.streak} day streak
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold" style={{ color: userLevel.color }}>
+                          {user.carbon.toFixed(1)}
+                        </p>
+                        <p className="text-xs text-gray-500">kg CO₂</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Level Breakdown */}
+            <div className="bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-gray-200">
+              <h3 className="font-semibold mb-4 text-gray-800">🎯 Level System</h3>
+              <div className="grid md:grid-cols-2 gap-3">
+                {LEVELS.map((level, index) => (
+                  <div
+                    key={index}
+                    className={`p-4 rounded-xl border-2 transition-all ${
+                      getCurrentLevel().name === level.name
+                        ? 'border-current shadow-lg scale-105'
+                        : 'border-gray-200'
+                    }`}
+                    style={{ borderColor: getCurrentLevel().name === level.name ? level.color : undefined }}
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-3xl">{level.icon}</span>
+                      <div>
+                        <h4 className="font-bold" style={{ color: level.color }}>
+                          {level.name}
+                        </h4>
+                        <p className="text-xs text-gray-600">
+                          {level.minCarbon === 0 ? 'Start' : `${level.minCarbon}+`} kg CO₂
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600">{level.benefits}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {currentTab === 'challenges' && (
+          <div className="space-y-4">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-2">🎯 Weekly Challenges</h3>
+              <p className="text-white/90">Complete challenges to earn badges and level up faster!</p>
+            </div>
+
+            {/* Active Challenge */}
+            {activeChallenge && (
+              <div className="bg-white/80 backdrop-blur-lg rounded-xl p-6 border-2 border-pink-300">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-4xl">{activeChallenge.icon}</span>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-800">{activeChallenge.name}</h3>
+                    <p className="text-gray-600">{activeChallenge.desc}</p>
+                  </div>
+                </div>
+                
+                <div className="mb-4">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-600">Your Progress</span>
+                    <span className="font-bold text-gray-800">
+                      {getChallengeProgress(activeChallenge)} / {activeChallenge.target}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-4">
+                    <div
+                      className="bg-gradient-to-r from-pink-500 to-purple-500 h-4 rounded-full transition-all duration-500"
+                      style={{ width: `${Math.min((getChallengeProgress(activeChallenge) / activeChallenge.target) * 100, 100)}%` }}
+                    />
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {getChallengeProgress(activeChallenge) >= activeChallenge.target 
+                      ? '🎉 Challenge completed! Click below to claim your badge!'
+                      : `Keep going! ${activeChallenge.target - getChallengeProgress(activeChallenge)} more to complete.`
+                    }
+                  </p>
+                </div>
+
+                {getChallengeProgress(activeChallenge) >= activeChallenge.target ? (
+                  <button
+                    onClick={completeChallenge}
+                    className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-lg font-semibold hover:shadow-xl transition-all"
+                  >
+                    ✅ Complete Challenge & Earn Badge
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setActiveChallenge(null)}
+                    className="w-full bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-all"
+                  >
+                    Cancel Challenge
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Available Challenges */}
+            {!activeChallenge && (
+              <div className="grid md:grid-cols-2 gap-4">
+                {WEEKLY_CHALLENGES.map(challenge => (
+                  <div
+                    key={challenge.id}
+                    className="bg-white/80 backdrop-blur-lg rounded-xl p-6 border border-gray-200 hover:border-pink-300 transition-all hover:shadow-lg"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-4xl">{challenge.icon}</span>
+                      <div>
+                        <h4 className="font-bold text-lg text-gray-800">{challenge.name}</h4>
+                        <p className="text-sm text-gray-600">{challenge.desc}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg p-3 mb-3">
+                      <p className="text-sm text-gray-700">
+                        <strong>Goal:</strong> {challenge.target > 0 ? `Complete ${challenge.target} times` : 'Minimize activities'} this week
+                      </p>
+                    </div>
+                    
+                    <button
+                      onClick={() => startChallenge(challenge)}
+                      className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all"
+                    >
+                      Start Challenge
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Completed Challenges */}
+            {JSON.parse(localStorage.getItem('completedChallenges') || '[]').length > 0 && (
+              <div className="bg-white/80 backdrop-blur-lg rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold mb-4 text-gray-800 flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-emerald-500" />
+                  Completed Challenges
+                </h3>
+                <div className="grid md:grid-cols-3 gap-3">
+                  {JSON.parse(localStorage.getItem('completedChallenges') || '[]').map((challenge, index) => (
+                    <div key={index} className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                      <div className="text-3xl mb-2">{challenge.icon}</div>
+                      <h4 className="font-semibold text-gray-800">{challenge.name}</h4>
+                      <p className="text-xs text-gray-500">
+                        {new Date(challenge.completedDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Activity Logger Modal */}
@@ -938,6 +1755,215 @@ export default function CarbonTracker() {
         </div>
       )}
 
+      {/* AI Coach Modal */}
+      {showAiCoach && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-3xl w-full h-[600px] flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent flex items-center gap-2">
+                  <Sparkles className="w-6 h-6 text-blue-500" />
+                  AI Sustainability Coach
+                </h2>
+                <p className="text-sm text-gray-600">Ask me anything about reducing your carbon footprint!</p>
+              </div>
+              <button onClick={() => setShowAiCoach(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Chat Area */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {chatHistory.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">🤖</div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Hi! I'm your AI Coach</h3>
+                  <p className="text-gray-600 mb-6">I've analyzed your carbon tracking data. Ask me anything!</p>
+                  
+                  <div className="grid grid-cols-2 gap-3 max-w-2xl mx-auto">
+                    <button
+                      onClick={() => chatWithAI("What's my biggest carbon source and how can I reduce it?")}
+                      className="p-4 bg-blue-50 hover:bg-blue-100 rounded-xl text-left transition-all"
+                    >
+                      <p className="font-semibold text-blue-800 text-sm">💡 Biggest Impact</p>
+                      <p className="text-xs text-gray-600 mt-1">Where should I focus?</p>
+                    </button>
+                    <button
+                      onClick={() => chatWithAI("Give me 3 easy ways to reduce my footprint this week")}
+                      className="p-4 bg-emerald-50 hover:bg-emerald-100 rounded-xl text-left transition-all"
+                    >
+                      <p className="font-semibold text-emerald-800 text-sm">🌱 Quick Wins</p>
+                      <p className="text-xs text-gray-600 mt-1">Easy changes to make</p>
+                    </button>
+                    <button
+                      onClick={() => chatWithAI("How does my carbon footprint compare to average?")}
+                      className="p-4 bg-purple-50 hover:bg-purple-100 rounded-xl text-left transition-all"
+                    >
+                      <p className="font-semibold text-purple-800 text-sm">📊 How am I doing?</p>
+                      <p className="text-xs text-gray-600 mt-1">Compare to average</p>
+                    </button>
+                    <button
+                      onClick={() => chatWithAI("What challenge should I try next?")}
+                      className="p-4 bg-orange-50 hover:bg-orange-100 rounded-xl text-left transition-all"
+                    >
+                      <p className="font-semibold text-orange-800 text-sm">🎯 Next Challenge</p>
+                      <p className="text-xs text-gray-600 mt-1">Level up my impact</p>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {chatHistory.map((msg, index) => (
+                    <div
+                      key={index}
+                      className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div
+                        className={`max-w-[80%] rounded-2xl p-4 ${
+                          msg.role === 'user'
+                            ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}
+                      >
+                        <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                      </div>
+                    </div>
+                  ))}
+                  {isAiThinking && (
+                    <div className="flex justify-start">
+                      <div className="bg-gray-100 rounded-2xl p-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* Input Area */}
+            <div className="p-4 border-t border-gray-200">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={userMessage}
+                  onChange={(e) => setUserMessage(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && userMessage.trim() && !isAiThinking) {
+                      chatWithAI(userMessage);
+                    }
+                  }}
+                  placeholder="Ask me anything about reducing carbon..."
+                  className="flex-1 p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 outline-none"
+                  disabled={isAiThinking}
+                />
+                <button
+                  onClick={() => {
+                    if (userMessage.trim() && !isAiThinking) {
+                      chatWithAI(userMessage);
+                    }
+                  }}
+                  disabled={!userMessage.trim() || isAiThinking}
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* AI Logger Modal */}
+      {showAiLogger && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-2xl w-full p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">🤖 AI Activity Logger</h2>
+                <p className="text-sm text-gray-600">Describe your activities in plain English!</p>
+              </div>
+              <button onClick={() => setShowAiLogger(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Examples */}
+              <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                <h3 className="font-semibold text-purple-800 mb-2">💡 Try these examples:</h3>
+                <div className="space-y-1 text-sm text-purple-700">
+                  <p>• "I drove 50km to work today"</p>
+                  <p>• "Had a beef burger and chicken salad"</p>
+                  <p>• "Bought 3 shirts and used AC for 5 hours"</p>
+                  <p>• "Took the bus 20km and ate vegan lunch"</p>
+                </div>
+              </div>
+
+              {/* Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Describe your activities:
+                </label>
+                <textarea
+                  value={aiInput}
+                  onChange={(e) => setAiInput(e.target.value)}
+                  className="w-full p-4 border-2 border-purple-200 rounded-lg focus:border-purple-500 outline-none min-h-[120px]"
+                  placeholder="E.g., I drove 30km, ate beef, and bought 2 shirts..."
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    processNaturalLanguage(aiInput);
+                    setAiInput('');
+                    setShowAiLogger(false);
+                  }}
+                  className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                >
+                  <Zap className="w-5 h-5" />
+                  Process with AI
+                </button>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => setAiInput("drove 50km to work")}
+                  className="p-3 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-all"
+                >
+                  🚗 Drove to work
+                </button>
+                <button
+                  onClick={() => setAiInput("had beef burger for lunch")}
+                  className="p-3 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-all"
+                >
+                  🍔 Beef meal
+                </button>
+                <button
+                  onClick={() => setAiInput("bought 2 shirts")}
+                  className="p-3 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-all"
+                >
+                  👕 Shopping
+                </button>
+                <button
+                  onClick={() => setAiInput("used AC for 3 hours")}
+                  className="p-3 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-all"
+                >
+                  ❄️ AC usage
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Share Modal */}
       {showShareModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
@@ -1000,6 +2026,5 @@ export default function CarbonTracker() {
         </div>
       )}
     </div>
-  </div>
   );
 }
